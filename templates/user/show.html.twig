@@ -3,48 +3,51 @@
 {% block title %}User{% endblock %}
 
 {% block content %}
-    <h1>User</h1>
+<section class="login-block">
+    <div class="container">
+        <div class="col-md login-sec">
+            <h2 class="text-center">Utilisateur</h2>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ user.id }}</td>
-            </tr>
-            <tr>
-                <th>Firstname</th>
-                <td>{{ user.firstname }}</td>
-            </tr>
-            <tr>
-                <th>Lastname</th>
-                <td>{{ user.lastname }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ user.email }}</td>
-            </tr>
-            <tr>
-                <th>Password</th>
-                <td>{{ user.password }}</td>
-            </tr>
-            <tr>
-                <th>Username</th>
-                <td>{{ user.username }}</td>
-            </tr>
-            <tr>
-                <th>Roles</th>
-                <td>{{ user.roles }}</td>
-            </tr>
-            <tr>
-                <th>Messages</th>
-                <td>{{ user.messages ? user.messages|join(', ') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('user_index') }}">back to list</a>
-
-    <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
-
-    {{ include('user/_delete_form.html.twig') }}
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th>Id</th>
+                            <td>{{ user.id }}</td>
+                        </tr>
+                        <tr>
+                            <th>Firstname</th>
+                            <td>{{ user.firstname }}</td>
+                        </tr>
+                        <tr>
+                            <th>Lastname</th>
+                            <td>{{ user.lastname }}</td>
+                        </tr>
+                        <tr>
+                            <th>Email</th>
+                            <td>{{ user.email }}</td>
+                        </tr>
+                        <tr>
+                            <th>Username</th>
+                            <td>{{ user.username }}</td>
+                        </tr>
+                        <tr>
+                            <th>Roles</th>
+                            <td>{{ user.roles|join(', ')  }}</td>
+                        </tr>
+                        <tr>
+                            <th>Messages</th>
+                            <td>{{ user.messages ? user.messages|join(', ') : '' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <a  href="{{ path('user_index') }}">
+                    <button class="btn btn-info btn-sm ">Retour</button>
+                </a>
+                <a href="{{ path('user_edit', {'id': user.id}) }}">
+                    <button class="btn btn-info btn-sm "><i class="fa fa-edit"></i></button>
+                </a>
+        {{ include('user/_delete_form.html.twig') }}
+</div>
+</div>
+    </section>
 {% endblock %}
