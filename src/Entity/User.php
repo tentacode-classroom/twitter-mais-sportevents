@@ -55,11 +55,6 @@ class User implements UserInterface , \Serializable
      */
     private $followers;
 
-    /**
-     * @ORM\Column(type="array", nullable=true)
-     */
-    private $messages = [];
-
     public function __construct()
     {
         $this->followers = new ArrayCollection();
@@ -195,18 +190,6 @@ class User implements UserInterface , \Serializable
         if ($this->followers->contains($follower)) {
             $this->followers->removeElement($follower);
         }
-
-        return $this;
-    }
-
-    public function getMessages(): ?array
-    {
-        return $this->messages;
-    }
-
-    public function setMessages(?array $messages): self
-    {
-        $this->messages = $messages;
 
         return $this;
     }
