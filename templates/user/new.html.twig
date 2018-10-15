@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New User{% endblock %}
+
+{% block content %}
+    <section class="login-block">
+        <div class="container">
+            <div class="col-md login-sec">
+                <h2 class="text-center">Creation nouvel utilisateur</h2>
+                {{ include('user/_form.html.twig') }}
+                <a href="{{ path('user_index') }}" class="float-right">Retour</a>
+            </div>
+                 
+        </div>
+       
+    </section>
+
+{% endblock %}
