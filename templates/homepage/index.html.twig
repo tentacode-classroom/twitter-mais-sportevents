@@ -12,8 +12,8 @@
                 <div class="card">
                 <img class="card-img-top" src="http://static.shoplightspeed.com/shops/611883/files/006123068/800x700x2/kaloo-toutou-ourson-19-cm-les-amis.jpg" alt="Card image cap">
                     <div class="card-body">
-                        <div class="h5">@LeeCross</div>
-                        <div class="h7 text-muted">Fullname : Miracles Lee Cross</div>
+                        <div class="h5">@{{ app.user.username }}</div>
+                        <div class="h7 text-muted">Nom complet : {{ app.user.firstname }} {{app.user.lastname }}</div>
                         <div class="h7">Developer of web applications, JavaScript, PHP, Java, Python, Ruby, Java, Node.js,
                             etc.
                         </div>
@@ -23,7 +23,7 @@
                             <div class="row">
                                 <div class="block">
                                     <div class="h6 text-muted">Followers</div>
-                                    <div class="h5">5.2342</div>
+                                    <div class="h5">{{ app.user.followers.count()}}</div>
                                 </div>
                                 <div class="block">
                                     <div class="h6 text-muted">Following</div>
