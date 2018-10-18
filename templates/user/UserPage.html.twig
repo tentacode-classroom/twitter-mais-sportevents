@@ -13,23 +13,23 @@
             <a href="{{path('follow',{'profileId': user.id}) }}" class="twitter-follow-button" data-show-count="false" data-size="large" data-show-screen-name="false" data-dnt="true">Follow</a>  
 		</div>
 
-		<a title="Mert S. Kaplan" href="https://twitter.com/mertskaplan" class="twPc-avatarLink">
-			<img alt="Mert S. Kaplan" src="https://mertskaplan.com/wp-content/plugins/msk-twprofilecard/img/mertskaplan.jpg" class="twPc-avatarImg">
+		<a class="twPc-avatarLink">
+			<img src="{{ asset('/uploads/' ~ user.image)}}" class="twPc-avatarImg">
 		</a>
 
 		<div class="twPc-divUser">
 			<div class="twPc-divName">
-				<a href="https://twitter.com/mertskaplan">{{user.firstname}} {{ user.lastname }}</a>
+				<a>{{user.firstname}} {{ user.lastname }}</a>
 			</div>
 			<span>
-				<a href="https://twitter.com/mertskaplan">@<span>{{user.username}} </span></a>
+				<a>@<span>{{user.username}} </span></a>
 			</span>
 		</div>
 
 		<div class="twPc-divStats">
 			<ul class="twPc-Arrange">
 				<li class="twPc-ArrangeSizeFit">
-					<a href="https://twitter.com/mertskaplan" title="9.840 Tweet">
+					<a>
 						<span class="twPc-StatLabel twPc-block">Tweets</span>
 						<span class="twPc-StatValue">{{user.getMessages().count()}}</span>
 					</a>
@@ -37,13 +37,13 @@
 				<li class="twPc-ArrangeSizeFit">
 					<a href="https://twitter.com/mertskaplan/following" title="885 Following">
 						<span class="twPc-StatLabel twPc-block">Following</span>
-						<span class="twPc-StatValue">885</span>
+						<span class="twPc-StatValue"></span>
 					</a>
 				</li>
 				<li class="twPc-ArrangeSizeFit">
 					<a href="https://twitter.com/mertskaplan/followers" title="1.810 Followers">
 						<span class="twPc-StatLabel twPc-block">Followers</span>
-						<span class="twPc-StatValue">1.810</span>
+						<span class="twPc-StatValue">{{user.getFollowers().count()}}</span>
 					</a>
 				</li>
 			</ul>

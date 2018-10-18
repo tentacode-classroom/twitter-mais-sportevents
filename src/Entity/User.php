@@ -56,20 +56,33 @@ class User implements UserInterface , \Serializable
     private $messages;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Followers", mappedBy="following")
-     */
-    private $followers;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Message", inversedBy="likes")
      */
     private $message;
+
+ 
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="S'il vous plait veuillez telecharger un fichier image.")
+     * @Assert\File(mimeTypes={ "image/jpeg", "image/jpg", "image/png" })
+     */
+    private $image;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Follower", mappedBy="follower")
+     */
+    private $followers;
+
+    private $following;
 
 
     public function __construct()
     {
         $this->messages = new ArrayCollection();
+        $this->following = new ArrayCollection();
         $this->followers = new ArrayCollection();
+
     }
 
     public function getId(): ?int
@@ -212,39 +225,59 @@ class User implements UserInterface , \Serializable
 
         return $this;
     }
-
-    /**
-     * @return Collection|Followers[]
-     */
-    public function getFollowers(): Collection
-    {
-        return $this->followers;
-    }
-
-    public function addFollower(Followers $follower): self
-    {
-        if (!$this->followers->contains($follower)) {
-            $this->followers[] = $follower;
-            $follower->addFollowing($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFollower(Followers $follower): self
-    {
-        if ($this->followers->contains($follower)) {
-            $this->followers->removeElement($follower);
-            $follower->removeFollowing($this);
-        }
-
-        return $this;
-    }
-
     
     public function likeMessage(Message $message): self
     {
       $message-> addLike($this);
       return $this;
     }
+
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    public function setImage($image)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Follower[]
+     */
+    public function getFollowers(): Collection
+    {
+        return $this->followers;
+    }
+
+    public function addFollower(Follower $follower): self
+    {
+        if (!$this->followers->contains($follower)) {
+            $this->followers[] = $follower;
+            $follower->setFollower($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFollower(Follower $follower): self
+    {
+        if ($this->followers->contains($follower)) {
+            $this->followers->removeElement($follower);
+            // set the owning side to null (unless already changed)
+            if ($follower->getFollower() === $this) {
+                $follower->setFollower(null);
+            }
+        }
+
+        return $this;
+    }
+    public function getFollowing(){
+        return $this->following; 
+    }
+
+
+ 
 }
