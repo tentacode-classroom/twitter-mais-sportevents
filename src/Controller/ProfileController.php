@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+
 class ProfileController extends AbstractController
 {
     /**
@@ -31,19 +32,22 @@ class ProfileController extends AbstractController
     }
 
       /**
-     * @Route("/profile/follow", name="follow")
+     * @Route("/profile/follow/{profileId}", name="follow")
      */
-    public function follow(Request $request, UserInterface $userInterface  , ObjectManager $manager)
+    public function follow(Request $request, UserInterface $userInterface  , ObjectManager $manager, $profileId = 1)
     {
         $loggedUser= $this->getDoctrine()
             ->getRepository(User::class)
             ->findByUsername($userInterface->getUsername());
         
-        $loggedUser -> addFollowers($loggedUser);
         
-        $manager -> persist($loggedUser);
-        $manager -> flush();
+        $user = $this-> getDoctrine()
+            ->getRepository(User::class)
+            ->find($profileId);
         
+        $user -> addFollower($loggedUser);
+        $loggedUser ->addFollowing($user);
+     
         return $this->render('/user/userPage.html.twig', [
             'user' => $user,
         ]);

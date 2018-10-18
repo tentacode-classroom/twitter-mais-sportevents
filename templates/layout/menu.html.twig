@@ -3,7 +3,7 @@
   <h5 class="my-0 mr-md-auto font-weight-normal">Twitter</h5>
     <nav class="my-2 my-md-0 mr-md-3">
       <a class="p-2 text-dark" href="/">Accueil</a>
-      <a class="p-2 text-dark" href="/profile">Mon profil</a>
+      <a class="p-2 text-dark" href="{{ path('profile', {'profileId': app.user.id}) }}">Mon profil</a>
       {% if is_granted('ROLE_ADMIN') %}
           <a class="p-2 text-dark" href="/admin/user">Gestion Utilisateurs</a>
       {% endif %}

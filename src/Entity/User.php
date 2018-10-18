@@ -51,19 +51,25 @@ class User implements UserInterface , \Serializable
     private $roles = ['ROLE_USER'];
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Followers", inversedBy="users")
+     * @ORM\OneToMany(targetEntity="App\Entity\Message", mappedBy="user", cascade={"persist"})
+     */
+    private $messages;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Followers", mappedBy="following")
      */
     private $followers;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Message", mappedBy="user")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Message", inversedBy="likes")
      */
-    private $messages;
+    private $message;
+
 
     public function __construct()
     {
-        $this->followers = new ArrayCollection();
         $this->messages = new ArrayCollection();
+        $this->followers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -174,31 +180,7 @@ class User implements UserInterface , \Serializable
         ) = unserialize($serialized, array('allowed_classes' => false));
     }
 
-    /**
-     * @return Collection|Followers[]
-     */
-    public function getFollowers(): Collection
-    {
-        return $this->followers;
-    }
 
-    public function addFollower(Followers $follower): self
-    {
-        if (!$this->followers->contains($follower)) {
-            $this->followers[] = $follower;
-        }
-
-        return $this;
-    }
-
-    public function removeFollower(Followers $follower): self
-    {
-        if ($this->followers->contains($follower)) {
-            $this->followers->removeElement($follower);
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection|Message[]
@@ -231,4 +213,38 @@ class User implements UserInterface , \Serializable
         return $this;
     }
 
+    /**
+     * @return Collection|Followers[]
+     */
+    public function getFollowers(): Collection
+    {
+        return $this->followers;
+    }
+
+    public function addFollower(Followers $follower): self
+    {
+        if (!$this->followers->contains($follower)) {
+            $this->followers[] = $follower;
+            $follower->addFollowing($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFollower(Followers $follower): self
+    {
+        if ($this->followers->contains($follower)) {
+            $this->followers->removeElement($follower);
+            $follower->removeFollowing($this);
+        }
+
+        return $this;
+    }
+
+    
+    public function likeMessage(Message $message): self
+    {
+      $message-> addLike($this);
+      return $this;
+    }
 }
