@@ -7,9 +7,20 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * 
+ * @UniqueEntity(
+ *  fields={"email"},
+ *  message="Cette adresse e-mail est déjà utilisée pour un autre compte"
+ * )
+ * @UniqueEntity(
+ *  fields={"username"},
+ *  message="Ce nom d'utilisateur est déjà utilisé pour un autre compte"
+ * )
+
  */
 class User implements UserInterface , \Serializable
 {
@@ -51,13 +62,38 @@ class User implements UserInterface , \Serializable
     private $roles = ['ROLE_USER'];
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Followers", inversedBy="users")
+     * @ORM\OneToMany(targetEntity="App\Entity\Message", mappedBy="user", cascade={"persist"})
+     */
+    private $messages;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Message", inversedBy="likes")
+     */
+    private $message;
+
+ 
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="S'il vous plait veuillez telecharger un fichier image.")
+     * @Assert\File(mimeTypes={ "image/jpeg", "image/jpg", "image/png" })
+     */
+    private $image;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Follower", mappedBy="follower")
      */
     private $followers;
 
+    private $following;
+
+
     public function __construct()
     {
+        $this->messages = new ArrayCollection();
+        $this->following = new ArrayCollection();
         $this->followers = new ArrayCollection();
+
     }
 
     public function getId(): ?int
@@ -168,30 +204,91 @@ class User implements UserInterface , \Serializable
         ) = unserialize($serialized, array('allowed_classes' => false));
     }
 
+
+
     /**
-     * @return Collection|Followers[]
+     * @return Collection|Message[]
+     */
+    public function getMessages(): Collection
+    {
+        return $this->messages;
+    }
+
+    public function addMessage(Message $message): self
+    {
+        if (!$this->messages->contains($message)) {
+            $this->messages[] = $message;
+            $message->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMessage(Message $message): self
+    {
+        if ($this->messages->contains($message)) {
+            $this->messages->removeElement($message);
+            // set the owning side to null (unless already changed)
+            if ($message->getUser() === $this) {
+                $message->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+    
+    public function likeMessage(Message $message): self
+    {
+      $message-> addLike($this);
+      return $this;
+    }
+
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    public function setImage($image)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Follower[]
      */
     public function getFollowers(): Collection
     {
         return $this->followers;
     }
 
-    public function addFollower(Followers $follower): self
+    public function addFollower(Follower $follower): self
     {
         if (!$this->followers->contains($follower)) {
             $this->followers[] = $follower;
+            $follower->setFollower($this);
         }
 
         return $this;
     }
 
-    public function removeFollower(Followers $follower): self
+    public function removeFollower(Follower $follower): self
     {
         if ($this->followers->contains($follower)) {
             $this->followers->removeElement($follower);
+            // set the owning side to null (unless already changed)
+            if ($follower->getFollower() === $this) {
+                $follower->setFollower(null);
+            }
         }
 
         return $this;
     }
+    public function getFollowing(){
+        return $this->following; 
+    }
 
+
+ 
 }

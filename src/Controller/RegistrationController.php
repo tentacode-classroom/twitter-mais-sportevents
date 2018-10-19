@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -28,6 +29,7 @@ class RegistrationController extends AbstractController
                 ->add('email', EmailType::class, array('label' => 'Email'))
                 ->add('password', PasswordType::class, array('label' => 'Mot de Passe'))
                 ->add('username', TextType::class, array('label' => 'Nom d\'utilisateur'))
+                ->add('image', FileType::class, array('label' => 'Photo de profil'))
                 ->add('save', SubmitType::class, array('label' => 'Créer mon Compte'))
                 ->getForm();
             
@@ -38,6 +40,11 @@ class RegistrationController extends AbstractController
                     $plainPassword= $user->getPassword();
                     $encryptedPassword = $encoder->encodePassword($user, $plainPassword);
                     $user->setPassword($encryptedPassword);
+
+                    $file =$user ->getImage();
+                    $fileName = md5(uniqid()).'.'.$file->guessExtension();
+                    $file->move($this->getParameter('upload_directory'), $fileName);
+                    $user->setImage($fileName);
                     $entityManager = $this->getDoctrine()->getManager();
                     $entityManager->persist($user);
                     $entityManager->flush();

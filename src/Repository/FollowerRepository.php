@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\Followers;
+use App\Entity\Follower;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method Followers|null find($id, $lockMode = null, $lockVersion = null)
- * @method Followers|null findOneBy(array $criteria, array $orderBy = null)
- * @method Followers[]    findAll()
- * @method Followers[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Follower|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Follower|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Follower[]    findAll()
+ * @method Follower[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class FollowersRepository extends ServiceEntityRepository
+class FollowerRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, Followers::class);
+        parent::__construct($registry, Follower::class);
     }
 
 //    /**
-//     * @return Followers[] Returns an array of Followers objects
+//     * @return Follower[] Returns an array of Follower objects
 //     */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class FollowersRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Followers
+    public function findOneBySomeField($value): ?Follower
     {
         return $this->createQueryBuilder('f')
             ->andWhere('f.exampleField = :val')
