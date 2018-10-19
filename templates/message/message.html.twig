@@ -3,7 +3,7 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="mr-2">
-                                    <img class="rounded-circle" width="45" src="https://picsum.photos/50/50" alt="">
+                                    <img class="rounded-circle" width="45" src="{{ asset('/uploads/' ~ app.user.image)}}" alt="">
                                 </div>
                                 <div class="ml-2">
                                     <div class="h5 m-0">@{{user.username}}</div>
@@ -27,7 +27,7 @@
 
                     </div>
                 <div class="card-body">
-                        <div class="text-muted h7 mb-2"> <i class="fa fa-clock-o"></i>10 min ago</div>
+                        <div class="text-muted h7 mb-2"> <i class="fa fa-clock-o"></i>{{message.getPublicationDate()|date('Y-m-d')}}</div>
                         <p class="card-text">{{message.content}}</p>
                     </div>
                     <div class="card-footer">

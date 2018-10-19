@@ -36,10 +36,8 @@ class MessageController extends AbstractController
         $entityManager->persist($message);
         $entityManager->flush();
 
-        return $this->render('message/message.html.twig', [
-            'user'=>$message->getUser(),
-            'message'=>$message
-        ]);
+        $previousUrl = $request->server->get('HTTP_REFERER');
+        return $this->redirect($previousUrl);
     }
 
      /**
@@ -65,10 +63,8 @@ class MessageController extends AbstractController
         $entityManager->persist($message);
         $entityManager->flush();
         
-        return $this->render('message/message.html.twig', [
-            'user'=>$message->getUser(),
-            'message'=>$message
-        ]);
+        $previousUrl = $request->server->get('HTTP_REFERER');
+        return $this->redirect($previousUrl);
     }
 
 }

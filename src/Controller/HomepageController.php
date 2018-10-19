@@ -25,6 +25,8 @@ class HomepageController extends AbstractController
         ->findOneBySomeField($userInterface->getUsername());
 
         $message = new Message();
+        $message ->setPublicationDate( new \DateTime('NOW'));
+        
     
         $form = $this->createFormBuilder($message)
             ->add('content', TextareaType::class)

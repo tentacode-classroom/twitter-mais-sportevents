@@ -7,9 +7,20 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * 
+ * @UniqueEntity(
+ *  fields={"email"},
+ *  message="Cette adresse e-mail est déjà utilisée pour un autre compte"
+ * )
+ * @UniqueEntity(
+ *  fields={"username"},
+ *  message="Ce nom d'utilisateur est déjà utilisé pour un autre compte"
+ * )
+
  */
 class User implements UserInterface , \Serializable
 {

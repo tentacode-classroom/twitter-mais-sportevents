@@ -33,6 +33,11 @@ class Message
      * @ORM\OneToMany(targetEntity="App\Entity\Like", mappedBy="message")
      */
     private $likes;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $publicationDate;
   
     public function __construct()
     {
@@ -119,5 +124,18 @@ class Message
             }
         }
         return null;
+    }
+
+    public function getPublicationDate(): ?\DateTimeInterface
+    {
+        return $this->publicationDate;
+    }
+
+    
+    public function setPublicationDate(\DateTimeInterface $publicationDate): self
+    {
+        $this->publicationDate = $publicationDate;
+
+        return $this;
     }
 }
