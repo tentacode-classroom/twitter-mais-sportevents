@@ -19,7 +19,7 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
-    public function findOneBySomeField($value): ?User
+    public function findByUsername($value): ?User
     {
         return $this->createQueryBuilder('u')
             ->andWhere('u.username = :val')
@@ -28,6 +28,8 @@ class UserRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
         ;
     }
+
+    
     
 
 //    /**

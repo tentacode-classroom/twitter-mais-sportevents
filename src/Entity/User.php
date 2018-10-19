@@ -81,19 +81,23 @@ class User implements UserInterface , \Serializable
     private $image;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Follower", mappedBy="follower")
+     * @ORM\OneToMany(targetEntity="App\Entity\Friend", mappedBy="follower")
      */
-    private $followers;
+    private $friends;
 
-    private $following;
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Friend", mappedBy="following")
+     */
+    private $myFollowers;
+
+
 
 
     public function __construct()
     {
         $this->messages = new ArrayCollection();
-        $this->following = new ArrayCollection();
-        $this->followers = new ArrayCollection();
-
+        $this->friends = new ArrayCollection();
+        $this->follower = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -256,37 +260,34 @@ class User implements UserInterface , \Serializable
     }
 
     /**
-     * @return Collection|Follower[]
+     * @return Collection|Friend[]
      */
-    public function getFollowers(): Collection
+    public function getFriends(): Collection
     {
-        return $this->followers;
+        return $this->friends;
     }
 
-    public function addFollower(Follower $follower): self
+    public function addFriend(Friend $friend): self
     {
-        if (!$this->followers->contains($follower)) {
-            $this->followers[] = $follower;
-            $follower->setFollower($this);
+        if (!$this->friends->contains($friend)) {
+            $this->friends[] = $friend;
+            $friend->setFollower($this);
         }
 
         return $this;
     }
 
-    public function removeFollower(Follower $follower): self
+    public function removeFriend(Friend $friend): self
     {
-        if ($this->followers->contains($follower)) {
-            $this->followers->removeElement($follower);
+        if ($this->friends->contains($friend)) {
+            $this->friends->removeElement($friend);
             // set the owning side to null (unless already changed)
-            if ($follower->getFollower() === $this) {
-                $follower->setFollower(null);
+            if ($friend->getFollower() === $this) {
+                $friend->setFollower(null);
             }
         }
 
         return $this;
-    }
-    public function getFollowing(){
-        return $this->following; 
     }
 
 

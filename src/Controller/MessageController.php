@@ -20,7 +20,7 @@ class MessageController extends AbstractController
     {
         $loggedUser= $this->getDoctrine()
         ->getRepository(User::class)
-        ->findOneBySomeField($userInterface->getUsername());
+        ->findByUsername($userInterface->getUsername());
 
         $message = $this-> getDoctrine()
         ->getRepository(Message::class)
@@ -47,7 +47,7 @@ class MessageController extends AbstractController
     {
         $loggedUser= $this->getDoctrine()
         ->getRepository(User::class)
-        ->findOneBySomeField($userInterface->getUsername());
+        ->findByUsername($userInterface->getUsername());
 
         $message = $this-> getDoctrine()
         ->getRepository(Message::class)

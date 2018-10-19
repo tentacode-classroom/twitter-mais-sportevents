@@ -37,13 +37,13 @@
 				<li class="twPc-ArrangeSizeFit">
 					<a href="https://twitter.com/mertskaplan/following" title="885 Following">
 						<span class="twPc-StatLabel twPc-block">Following</span>
-						<span class="twPc-StatValue"></span>
+						<span class="twPc-StatValue">{{user.followings|length}}</span>
 					</a>
 				</li>
 				<li class="twPc-ArrangeSizeFit">
 					<a href="https://twitter.com/mertskaplan/followers" title="1.810 Followers">
 						<span class="twPc-StatLabel twPc-block">Followers</span>
-						<span class="twPc-StatValue">{{user.getFollowers().count()}}</span>
+						<span class="twPc-StatValue">{{user.followers|length}}</span>
 					</a>
 				</li>
 			</ul>

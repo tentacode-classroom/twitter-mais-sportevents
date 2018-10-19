@@ -5,7 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
-use App\Entity\Follower;
+use App\Entity\Friend;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -16,6 +16,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class ProfileController extends AbstractController
 {
+
     /**
      * @Route("/{profileId}", name="profile")
      */
@@ -25,6 +26,15 @@ class ProfileController extends AbstractController
         $user = $this-> getDoctrine()
             ->getRepository(User::class)
             ->find($profileId);
+        dump($profileId);
+        
+        $user ->followers= $this-> getDoctrine()
+        ->getRepository(Friend::class)
+        ->findFollowers($user);
+
+        $user ->followings= $this-> getDoctrine()
+        ->getRepository(Friend::class)
+        ->findFollowings($user);
         
         $manager -> persist($user);
         $manager -> flush();
@@ -39,27 +49,27 @@ class ProfileController extends AbstractController
      */
     public function follow(Request $request, $profileId= 1,UserInterface $userInterface )
     {
-        $follower= new Follower();
-
+    
         $loggedUser= $this->getDoctrine()
             ->getRepository(User::class)
-            ->findOneBySomeField($userInterface->getUsername());
+            ->findByUsername($userInterface->getUsername());
                
         $user = $this-> getDoctrine()
             ->getRepository(User::class)
             ->find($profileId);
 
-        $follower -> setFollower($loggedUser);
-        $follower -> setFollowing($user);
+        $friend= new Friend();
+        $friend -> setFollower($loggedUser);
+        $friend -> setFollowing($user);
+
 
         $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($follower);
+        $entityManager->persist($friend);
         $entityManager->persist($user);
         $entityManager->persist($loggedUser);
         $entityManager->flush();
    
-        return $this->render('/user/userPage.html.twig', [
-            'user' => $user,
-        ]);
+        $previousUrl = $request->server->get('HTTP_REFERER');
+        return $this->redirect($previousUrl);
     }
 }

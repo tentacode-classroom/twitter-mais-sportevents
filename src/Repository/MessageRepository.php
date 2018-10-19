@@ -19,6 +19,21 @@ class MessageRepository extends ServiceEntityRepository
         parent::__construct($registry, Message::class);
     }
 
+     /**
+     * @return Message[] Returns an array of Message objects
+     */
+    public function findFriendMessages($user): array
+    {
+        return $this->createQueryBuilder('m')
+            ->join('m.user', 'u' )
+            ->join('u.myFollowers', 'f', 'WITH', 'f.follower = :val' )
+            ->setParameter('val', $user)
+            ->orderBy('m.publicationDate', 'Desc')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+    
 //    /**
 //     * @return Message[] Returns an array of Message objects
 //     */

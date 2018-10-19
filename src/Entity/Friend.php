@@ -7,9 +7,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\FollowerRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\FriendRepository")
  */
-class Follower
+class Friend
 {
     /**
      * @ORM\Id()
@@ -19,21 +19,18 @@ class Follower
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="followers")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="friends")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $follower;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $following;
 
 
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getFollower(): ?User
     {
@@ -58,10 +55,6 @@ class Follower
 
         return $this;
     }
-
-   
-
-
 
 
 }
