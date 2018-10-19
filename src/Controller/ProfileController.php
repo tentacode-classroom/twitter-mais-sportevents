@@ -45,7 +45,7 @@ class ProfileController extends AbstractController
     }
 
       /**
-     * @Route("/follow/{profileId}", name="follow")
+     * @Route("/{profileId}/follow", name="follow")
      */
     public function follow(Request $request, $profileId= 1,UserInterface $userInterface )
     {
