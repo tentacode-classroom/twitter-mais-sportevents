@@ -18,7 +18,7 @@ class HomepageController extends AbstractController
     /**
      * @Route("/")
      */
-    public function add_message(Request $request, UserInterface $userInterface)
+    public function add_message(Request $request, ?UserInterface $userInterface)
     {
         $loggedUser= $this->getDoctrine()
         ->getRepository(User::class)
