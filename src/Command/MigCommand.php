@@ -51,26 +51,6 @@ class MigCommand extends Command
             $output->writeln('> '.$buffer);
         });
         $io->newLine(20);
-        $io->title('Mise à jour de la BDD');
-        $io->progressAdvance();
-        $io->newLine(4);
-        $io->section('Application des fixtures doctrine');
-        $process = new Process('bin/console alice:fixture');
-        $process->setTimeout(300);
-        $process->mustRun(function ($type, $buffer) use ($io, $output) {
-            $output->writeln('> '.$buffer);
-        });
-        $io->newLine(20);
-        $io->title('Mise à jour de la BDD');
-        $io->progressAdvance();
-        $io->newLine(4);
-        $io->section('Application des fixtures alices');
-        $process = new Process('bin/console doctrine:fixtures:load --append --env=dev');
-        $process->setTimeout(300);
-        $process->mustRun(function ($type, $buffer) use ($io, $output) {
-            $output->writeln('> '.$buffer);
-        });
-        $io->newLine(20);
         $io->success('Base de données à jour !');
     }
 }
