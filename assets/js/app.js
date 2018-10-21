@@ -10,6 +10,7 @@ require('../css/app.css');
 require('../css/login.css');
 require('../css/homepage.css');
 require('../css/profile.css');
+require('../css/search.css');
 // Need jQuery? Install it with "yarn add jquery", then uncomment to require it.
 // var $ = require('jquery');
 

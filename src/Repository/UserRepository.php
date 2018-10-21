@@ -29,6 +29,16 @@ class UserRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findUsersStartingBy($word):array
+    {
+        return $this->createQueryBuilder('u')
+        ->andWhere('u.username LIKE :word')
+        ->orWhere('u.firstname LIKE :word')
+        ->setParameter('word', '%'.$word.'%')
+        ->getQuery()
+        ->getResult();
+    }
+
     
     
 

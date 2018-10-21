@@ -21,12 +21,15 @@ class ProfileController extends AbstractController
      * @Route("/{profileId}", name="profile")
      */
 
-    public function profile_page(Request $request, $profileId = 1, ObjectManager $manager)
+    public function profile_page(Request $request, $profileId = 1,UserInterface $userInterface)
     {
+        $loggedUser= $this->getDoctrine()
+        ->getRepository(User::class)
+        ->findByUsername($userInterface->getUsername());
+
         $user = $this-> getDoctrine()
             ->getRepository(User::class)
             ->find($profileId);
-        dump($profileId);
         
         $user ->followers= $this-> getDoctrine()
         ->getRepository(Friend::class)
@@ -35,12 +38,19 @@ class ProfileController extends AbstractController
         $user ->followings= $this-> getDoctrine()
         ->getRepository(Friend::class)
         ->findFollowings($user);
+
+        $friend= $this-> getDoctrine()
+        ->getRepository(Friend::class)
+        ->findFriendby($user, $loggedUser);
         
-        $manager -> persist($user);
-        $manager -> flush();
+        
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($user);
+        $entityManager->flush();;
         
         return $this->render('/user/userPage.html.twig', [
             'user' => $user,
+            'friend'=> $friend
         ]);
     }
 
@@ -67,6 +77,32 @@ class ProfileController extends AbstractController
         $entityManager->persist($friend);
         $entityManager->persist($user);
         $entityManager->persist($loggedUser);
+        $entityManager->flush();
+   
+        $previousUrl = $request->server->get('HTTP_REFERER');
+        return $this->redirect($previousUrl);
+    }
+
+     /**
+     * @Route("/{profileId}/unfollow", name="unfollow")
+     */
+    public function unfollow(Request $request, $profileId= 1,UserInterface $userInterface )
+    {
+    
+        $loggedUser= $this->getDoctrine()
+            ->getRepository(User::class)
+            ->findByUsername($userInterface->getUsername());
+               
+        $user = $this-> getDoctrine()
+            ->getRepository(User::class)
+            ->find($profileId);
+
+        $friend= $this-> getDoctrine()
+        ->getRepository(Friend::class)
+        ->findFriendby($user, $loggedUser);
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($friend);
         $entityManager->flush();
    
         $previousUrl = $request->server->get('HTTP_REFERER');

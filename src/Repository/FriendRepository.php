@@ -39,6 +39,17 @@ class FriendRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findFriendby($user, $loggedUser): ?Friend
+    {
+        return $this->createQueryBuilder('f')
+        ->andWhere('f.follower = :val')
+        ->setParameter('val',$loggedUser->getId())
+        ->andWhere('f.following = :us')
+        ->setParameter('us', $user->getId())
+        ->getQuery()
+        ->getOneOrNullResult();
+    }
+
 //    /**
 //     * @return Friend[] Returns an array of Friend objects
 //     */

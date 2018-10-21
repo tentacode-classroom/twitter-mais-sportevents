@@ -7,11 +7,14 @@
       {% if is_granted('ROLE_ADMIN') %}
           <a class="p-2 text-dark" href="/admin/user">Gestion Utilisateurs</a>
       {% endif %}
-
-      {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+    </nav>
+        <form class="form-inline mt-2 mt-md-0" action="{{ path('search') }}">
+            <input class="form-control mr-sm-2" type="text" placeholder="Recherche" aria-label="Search" name="search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Rechercher</button>
+        </form>
+     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
         <a class="btn btn-outline-primary" href="/logout">Se déconnecter({{app.user.username}})</a>
       {% else %}
         <a class="btn btn-outline-primary" href="/login">Se connecter</a>
       {% endif %}  
-    </nav>
 </div>

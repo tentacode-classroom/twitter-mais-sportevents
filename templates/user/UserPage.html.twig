@@ -9,9 +9,15 @@
     <a class="twPc-bg twPc-block"></a>
 
 	<div>
+		{% if user != app.user %}
 		<div class="twPc-button">
-            <a href="{{path('follow',{'profileId': user.id}) }}" class="twitter-follow-button" data-show-count="false" data-size="large" data-show-screen-name="false" data-dnt="true">Follow</a>  
+		{% if friend == null %}
+           <a href="{{path('follow',{'profileId': user.id}) }}" class="twitter-follow-button" >Follow</a>
+		{% else %}
+		   <a href="{{path('unfollow',{'profileId': user.id}) }}" class="twitter-follow-button" >UnFollow</a>
+		{% endif %}
 		</div>
+		{% endif %}
 
 		<a class="twPc-avatarLink">
 			<img src="{{ asset('/uploads/' ~ user.image)}}" class="twPc-avatarImg">

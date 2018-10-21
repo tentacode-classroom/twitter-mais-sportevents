@@ -6,37 +6,58 @@
                                     <img class="rounded-circle" width="45" src="{{ asset('/uploads/' ~ user.image)}}" alt="">
                                 </div>
                                 <div class="ml-2">
-                                    <div class="h5 m-0">@{{user.username}}</div>
+                                    <div class="h5 m-0"><a href="{{ path('profile', {'profileId': user.id}) }}">@{{user.username}}</a></div>
                                     <div class="h7 text-muted">{{user.firstname}} {{ user.lastname }}</div>
                                 </div>
                             </div>
                             <div>
-                                <div class="dropdown">
-                                    <button class="btn btn-link dropdown-toggle" type="button" id="gedf-drop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fa fa-ellipsis-h"></i>
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
-                                        <div class="h6 dropdown-header">Configuration</div>
-                                        <a class="dropdown-item" href="#">Save</a>
-                                        <a class="dropdown-item" href="#">Hide</a>
-                                        <a class="dropdown-item" href="#">Report</a>
-                                    </div>
-                                </div>
+                                {% if user == app.user or is_granted('ROLE_ADMIN') or is_granted('ROLE_MOD') %}
+                                    <a href="{{path('message_delete',{'messageId': message.id}) }}">
+                                        <button class="btn btn-danger float-right" ><i class="fa fa-trash"></i></button>
+                                    </a>
+                                 {% endif %}
                             </div>
                         </div>
-
                     </div>
                 <div class="card-body">
                         <div class="text-muted h7 mb-2"> <i class="fa fa-clock-o"></i>{{message.getPublicationDate()|date('Y-m-d')}}</div>
                         <p class="card-text">{{message.content}}</p>
                     </div>
                     <div class="card-footer">
-                        {% if message.getPeopleWhoLiked().contains(user) %}
-                        <a href="{{path('dislike_message',{'messageId': message.id},{'likeId': message.getUserLike(user).id }) }}" class="card-link"><i class="fa fa-gittip"></i> DisLike {{message.likes.count()}}</a>
+                        {% if message.getPeopleWhoLiked().contains(app.user) %}
+                        <a href="{{ path('dislike_message', {'messageId': message.id, 'likeId': message.getUserLike(app.user).id }) }}" class="card-link"><i class="fa fa-heart"></i> {{message.likes.count()}}</a>
                         {% else %}
-                         <a href="{{path('like_message',{'messageId': message.id}) }}" class="card-link"><i class="fa fa-gittip"></i> Like {{message.likes.count()}}</a>
+                         <a href="{{path('like_message',{'messageId': message.id}) }}" class="card-link"><i class="far fa-heart"></i> {{message.likes.count()}}</a>
                         {% endif %}
                         <a href="#" class="card-link"><i class="fa fa-comment"></i> Commenter</a>
                         <a href="#" class="card-link"><i class="fa fa-mail-forward"></i> Retweeter</a>
+                        <form class="form-inline" action="{{ path('comment_message', {'messageId': message.id}) }}">
+                         <input class="form-control mr-sm-2" type="text" placeholder="Commenter" name="comment">
+                     </form>
                     </div>
                 </div>
+                {% for comment in message.getComments()%}
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="mr-2">
+                                    <img class="rounded-circle" width="45" src="{{ asset('/uploads/' ~ comment.getUser().image)}}" alt="">
+                                </div>
+                                <div class="ml-2">
+                                    <div class="h5 m-0">@{{comment.getUser().username}}</div>
+                                    <div class="h7 text-muted">{{comment.getUser().firstname}} {{ comment.getUser().lastname }}</div>
+                                </div>
+                            </div>
+                            <div>
+                            </div>
+                        </div>
+                    </div>
+                   <div class="card-body">
+                        <div class="text-muted h7 mb-2"> <i class="fa fa-clock-o"></i>{{comment.getPublicationDate()|date('Y-m-d')}}</div>
+                        <p class="card-text">{{comment.content}}</p>
+                    </div>
+                </div>
+                {% endfor %}
+                
+    </div>         
+                

@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -26,6 +27,10 @@ class Message
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     *  @Assert\Length(
+     *      max = 280,
+     *      maxMessage = "Votre mot de passe est trop long : max {{ limit }} caractères"
+     * )
      */
     private $content;
 
@@ -38,11 +43,31 @@ class Message
      * @ORM\Column(type="datetime")
      */
     private $publicationDate;
-  
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Retweet", mappedBy="retweetedMessage")
+     */
+    private $retweets;
+
+      /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\File(mimeTypes={ "image/jpeg", "image/jpg", "image/png" })
+     */
+    private $image;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="message", cascade={"persist"})
+     */
+    private $comments;
+
+
     public function __construct()
     {
         $this->likes = new ArrayCollection();
         $this->peopleWhoLiked = new ArrayCollection();
+        $this->comments = new ArrayCollection();
+        $this->retweets = new ArrayCollection();
     }
 
 
@@ -120,7 +145,6 @@ class Message
         foreach ( $this->getLikes() as $like) {
             if ($like -> getUser()==$user){
                 return $like;
-                continue;
             }
         }
         return null;
@@ -138,4 +162,81 @@ class Message
 
         return $this;
     }
+
+
+    /**
+     * @return Collection|Retweet[]
+     */
+    public function getRetweets(): Collection
+    {
+        return $this->retweets;
+    }
+
+    public function addRetweet(Retweet $retweet): self
+    {
+        if (!$this->retweets->contains($retweet)) {
+            $this->retweets[] = $retweet;
+            $retweet->setRetweetedMessage($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRetweet(Retweet $retweet): self
+    {
+        if ($this->retweets->contains($retweet)) {
+            $this->retweets->removeElement($retweet);
+            // set the owning side to null (unless already changed)
+            if ($retweet->getRetweetedMessage() === $this) {
+                $retweet->setRetweetedMessage(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    public function setImage($image)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setMessage($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->contains($comment)) {
+            $this->comments->removeElement($comment);
+            // set the owning side to null (unless already changed)
+            if ($comment->getMessage() === $this) {
+                $comment->setMessage(null);
+            }
+        }
+
+        return $this;
+    }
+
+
 }

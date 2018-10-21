@@ -90,6 +90,11 @@ class User implements UserInterface , \Serializable
      */
     private $myFollowers;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Retweet", mappedBy="user")
+     */
+    private $retweets;
+
 
 
 
@@ -98,6 +103,7 @@ class User implements UserInterface , \Serializable
         $this->messages = new ArrayCollection();
         $this->friends = new ArrayCollection();
         $this->follower = new ArrayCollection();
+        $this->retweets = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -289,6 +295,48 @@ class User implements UserInterface , \Serializable
 
         return $this;
     }
+
+    public function IsFollowingUser(User $loggedUser,User $user)
+    {
+        foreach ($loggedUser->followings as $f) {
+            if($f->getFollowing()==$user){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @return Collection|Retweet[]
+     */
+    public function getRetweets(): Collection
+    {
+        return $this->retweets;
+    }
+
+    public function addRetweet(Retweet $retweet): self
+    {
+        if (!$this->retweets->contains($retweet)) {
+            $this->retweets[] = $retweet;
+            $retweet->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRetweet(Retweet $retweet): self
+    {
+        if ($this->retweets->contains($retweet)) {
+            $this->retweets->removeElement($retweet);
+            // set the owning side to null (unless already changed)
+            if ($retweet->getUser() === $this) {
+                $retweet->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
 
 
  
