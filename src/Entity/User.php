@@ -296,15 +296,6 @@ class User implements UserInterface , \Serializable
         return $this;
     }
 
-    public function IsFollowingUser(User $loggedUser,User $user)
-    {
-        foreach ($loggedUser->followings as $f) {
-            if($f->getFollowing()==$user){
-                return true;
-            }
-        }
-        return false;
-    }
 
     /**
      * @return Collection|Retweet[]

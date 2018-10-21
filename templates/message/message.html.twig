@@ -33,17 +33,16 @@
                         <a href="#" class="card-link"><i class="fa fa-mail-forward"></i> Retweeter</a>
                         <form class="form-inline" action="{{ path('comment_message', {'messageId': message.id}) }}">
                          <input class="form-control mr-sm-2" type="text" placeholder="Commenter" name="comment">
-                     </form>
+                        </form>
                     </div>
-                </div>
-                {% for comment in message.getComments()%}
+                                    {% for comment in message.getComments()%}
                     <div class="card-header">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="mr-2">
-                                    <img class="rounded-circle" width="45" src="{{ asset('/uploads/' ~ comment.getUser().image)}}" alt="">
+                        <div class="d-flex  align-items-center">
+                            <div class="d-flex align-items-center">
+                                <div class="mr-4">
+                                    <img class="rounded-circle" width="25" src="{{ asset('/uploads/' ~ comment.getUser().image)}}" alt="">
                                 </div>
-                                <div class="ml-2">
+                                <div class="ml-4">
                                     <div class="h5 m-0">@{{comment.getUser().username}}</div>
                                     <div class="h7 text-muted">{{comment.getUser().firstname}} {{ comment.getUser().lastname }}</div>
                                 </div>
@@ -56,8 +55,10 @@
                         <div class="text-muted h7 mb-2"> <i class="fa fa-clock-o"></i>{{comment.getPublicationDate()|date('Y-m-d')}}</div>
                         <p class="card-text">{{comment.content}}</p>
                     </div>
-                </div>
                 {% endfor %}
+                </div>
+                
+
                 
     </div>         
                 
